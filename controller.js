@@ -141,14 +141,35 @@ const create = async function (request, response) {
     link: request.body.link,
   });
 
-  const cardCreated = await movoCard.save()
+  const cardCreated = await movoCard.save();
   // const cardsAtualizados = [...cardsData, novoCard];
 
   // response.json(cardsAtualizados);
   response.json(cardCreated);
 };
 
+const cardUpdate = async function (request, response) {
+  const { id } = request.params;
+  const { title, description, link } = request.body;
+  const updateCard = await Card.findByIdAndUpdate(
+    id,
+    { title, description, link },
+    { new: true }
+  );
+
+  response.json(updateCard);
+};
+
+const cardDelete = async function (request, response) {
+  const { id } = request.params;
+  await Card.findByIdAndDelete(id);
+
+  response.json({ message: "FlashCard removido com sucesso!" });
+};
+
 module.exports = {
   getAll,
   create,
+  cardUpdate,
+  cardDelete,
 };
